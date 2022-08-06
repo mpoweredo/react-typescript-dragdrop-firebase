@@ -6,6 +6,8 @@ import type { DropResult } from 'react-beautiful-dnd';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../data/firebaseConfig';
 
+const classes = 'flex flex-col p-4 bg-zinc-800 rounded w-[320px]'
+
 const ItemList = () => {
 	const [data, setData] = useState<Item[]>([]);
 
@@ -44,7 +46,7 @@ const ItemList = () => {
 		<DragDropContext onDragEnd={handleDragEnd}>
 			<Droppable droppableId='list'>
 				{(provided: any) => (
-					<ul className='flex flex-col p-4' {...provided.droppableProps} ref={provided.innerRef}>
+					<ul className={classes} {...provided.droppableProps} ref={provided.innerRef}>
 						{data.map((item, index) => (
 							<ItemElement
 								title={item.title}
