@@ -1,44 +1,43 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { Item } from '../types/Item';
 import ItemElement from './ItemElement';
-import type { DropResult } from 'react-beautiful-dnd'
-
-const dummyData: Item[] = [
-	{
-		id: 0,
-		title: 'Go to gym',
-		done: false,
-	},
-	{
-		id: 1,
-		title: 'Make a dinner',
-		done: false,
-	},
-	{
-		id: 2,
-		title: 'Buy neckle for girlfriend',
-		done: false,
-	},
-	{
-		id: 3,
-		title: 'Wash a car',
-		done: false,
-	},
-];
+import type { DropResult } from 'react-beautiful-dnd';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { db } from '../data/firebaseConfig';
 
 const ItemList = () => {
-	const [data, setData] = useState<Item[]>(dummyData);
+	const [data, setData] = useState<Item[]>([]);
 
-	const handleDragEnd = (result: DropResult) => {
-		if (!result.destination) return;
+	useEffect(() => {
+		const getData = async () => {
+			const docRef = doc(db, 'board', 'todos');
+			const docSnap = await getDoc(docRef);
+			const tasks = docSnap.data();
+			console.log(docSnap.data());
+			setData(tasks!.tasks);
+		};
 
-        console.log(result)
+		getData();
+	}, []);
 
-		const items = Array.from(data);
-		const [reorderData] = items.splice(result.source.index, 1);
-		items.splice(result.destination.index, 0, reorderData);
-		setData(items);
+	const handleDragEnd = async (result: DropResult) => {
+		const { destination, source } = result;
+
+		if (!destination) return;
+		
+		const toBeMoved = data[source.index];
+		const newOrder = [...data];
+
+		newOrder.splice(source.index, 1);
+		newOrder.splice(destination.index, 0, toBeMoved);
+		setData(newOrder);
+
+		const docRef = doc(db, 'board', 'todos');
+
+		await updateDoc(docRef, {
+			tasks: newOrder,
+		});
 	};
 
 	return (

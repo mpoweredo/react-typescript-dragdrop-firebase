@@ -2,12 +2,12 @@ import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
-  apiKey: process.env.apiKey,
-  authDomain: "testing-drag-drop.firebaseapp.com",
-  projectId: "testing-drag-drop",
-  storageBucket: "testing-drag-drop.appspot.com",
-  messagingSenderId: "884885381630",
-  appId: "1:884885381630:web:263bef7bc0c1c11f5f60af"
+  apiKey: import.meta.env.VITE_apiKey,
+  authDomain: import.meta.env.VITE_authDomain,
+  projectId: import.meta.env.VITE_projectId,
+  storageBucket: import.meta.env.VITE_storageBucket,
+  messagingSenderId: import.meta.env.VITE_messagingSenderId,
+  appId: import.meta.env.VITE_appId
 };
 
 // Initialize Firebase
