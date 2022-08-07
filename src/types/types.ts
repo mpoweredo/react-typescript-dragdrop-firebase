@@ -1,3 +1,5 @@
+import { DropResult } from "react-beautiful-dnd";
+
 export type Item = {
     title: string;
 	done: boolean;
@@ -14,3 +16,4 @@ export type SectionColumn = {
 	title: string;
 	tasks: Task[]
 }
+
