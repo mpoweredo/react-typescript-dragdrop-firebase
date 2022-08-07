@@ -6,7 +6,7 @@ import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../data/firebaseConfig';
 import Section from './Section';
 
-const classes = 'flex p-4 bg-zinc-800 rounded-lg w-[900px] gap-2';
+const classes = 'flex flex-col sm:flex-row p-4 bg-zinc-800 rounded-lg w-[900px] gap-2';
 
 const mockData = [
 	{
@@ -71,15 +71,14 @@ const Kanban = () => {
 
 	const handleDragEnd = (result: DropResult) => {
 		if (!result.destination) return;
-
 		const { source, destination } = result;
 
-        console.log(result)
+		const sourceDroppableId: number = +source.droppableId
+		const destinationDroppableId: number = +destination.droppableId
 
-
-		if (source.droppableId !== destination.droppableId) {
-			const sourceCol = data[source.droppableId];
-			const destinationCol = data[destination.droppableId];
+		if (sourceDroppableId !== destinationDroppableId) {
+			const sourceCol = data[sourceDroppableId];
+			const destinationCol = data[destinationDroppableId];
             console.log(sourceCol)
 
 			const sourceTask = [...sourceCol.tasks];
@@ -88,12 +87,12 @@ const Kanban = () => {
 			const [removed] = sourceTask.splice(source.index, 1);
 			destinationTask.splice(destination.index, 0, removed);
 
-			data[source.droppableId].tasks = sourceTask;
-			data[destination.droppableId].tasks = destinationTask;
+			data[sourceDroppableId].tasks = sourceTask;
+			data[destinationDroppableId].tasks = destinationTask;
 
 			setData(data);
-		} else if (source.droppableId === destination.droppableId) {
-			const selectedColumn = data[source.droppableId].tasks;
+		} else if (sourceDroppableId === destinationDroppableId) {
+			const selectedColumn = data[sourceDroppableId].tasks;
 
 			const toBeMoved = selectedColumn[source.index];
 			const newOrder = [...selectedColumn];
@@ -103,7 +102,7 @@ const Kanban = () => {
 
             setData(prevState => {
                 const copy = [...prevState]
-                copy[source.droppableId].tasks = newOrder
+                copy[sourceDroppableId].tasks = newOrder
                 return copy
             })
         }
