@@ -22,7 +22,6 @@ const dragBetweenColumns = ({ source, destination }: DropResult, data: SectionCo
 
 const dragBetweenRows = ({ source, destination }: DropResult, data: SectionColumn[]): SectionColumn[] => {
 	const sourceDroppableId: number = +source.droppableId;
-	const destinationDroppableId: number = +destination!.droppableId;
 
 	const selectedColumn = data[sourceDroppableId].tasks;
 
